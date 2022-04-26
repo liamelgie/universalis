@@ -6,7 +6,7 @@ universalis.js is a promise-driven wrapper for the [Universalis API](https://uni
 [Universalis](https://github.com/Universalis-FFXIV/Universalis) is a crowd-sourced aggregator of marketboard data for FFXIV.
 
 ## Installation
-**Requires Node.js **
+**Requires Node.js**
 ```sh-session
 npm install universalis.js
 ```
