@@ -1,3 +1,4 @@
+import fetch from 'cross-fetch'
 class Universalis {
     constructor(options = {}) {
         const BASE_API_URL = 'https://universalis.app/api/' // Decide whether to leave the trailing slash or not
