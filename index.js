@@ -28,6 +28,23 @@ class Universalis {
 
         return false // Not found
     }
+
+    listings = async (world, id) => {
+        if (!world || !id) return false
+        if (!this.#validateServerName(world)) return false
+        const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
+        const res = await fetch(`${this.BASE_API_URL}/${world}/${itemID}`)
+        const data = await res.json()
+        return data
+    }
+
+    sales = async (world, id) => {
+        if (!world || !id) return false
+        if (!this.#validateServerName(world)) return false
+        const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
+        const res = await fetch(`${this.BASE_API_URL}/history/${world}/${itemID}`)
+        const data = await res.json()
+        return data
     }
 
     taxRates = async (world) => {
