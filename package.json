@@ -1,16 +1,24 @@
 {
   "name": "universalis",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "JS wrapper for the Universalis API",
+  "main": "universalis.js",
   "type": "module",
+  "dependencies": {
+    "cross-fetch": "^3.1.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cross-fetch": "^3.1.5"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liamelgie/universalis.git"
+  },
+  "keywords": ["ffxiv", "universalis"],
+  "author": "Liam Elgie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liamelgie/universalis/issues"
+  },
+  "homepage": "https://github.com/liamelgie/universalis#readme"
 }
