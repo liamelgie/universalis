@@ -4,6 +4,14 @@ class Universalis {
     constructor(options = {}) {
         this.BASE_API_URL = 'https://universalis.app/api'
     }
+
+    #arrayToParam = (array) => {
+        const param = array.map((item) => {
+            return JSON.stringify(item)
+        })
+        return param.join(',')
+    }
+
     #validateServerName = async (name) => {
         if (!name) return false
 
