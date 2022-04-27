@@ -29,7 +29,7 @@ class Universalis {
         return false // Not found
     }
 
-    listings = async (world, id) => {
+    getListings = async (world, id) => {
         if (!world || !id) return false
         if (!this.#validateServerName(world)) return false
         const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
@@ -38,7 +38,7 @@ class Universalis {
         return data
     }
 
-    sales = async (world, id) => {
+    getSales = async (world, id) => {
         if (!world || !id) return false
         if (!this.#validateServerName(world)) return false
         const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
@@ -74,20 +74,20 @@ class Universalis {
         return Object.fromEntries(Object.entries(sortedSalesAsObj).slice(0, limit))
     }
 
-    taxRates = async (world) => {
+    getTaxRates = async (world) => {
         if (!this.#validateServerName(world)) return false
         const res = await fetch(`${this.BASE_API_URL}/tax-rates?world=${world}`)
         const rates = await res.json()
         return rates
     }
 
-    marketableItems = async () => {
+    getMarketableItems = async () => {
         const res = await fetch(`${this.BASE_API_URL}/marketable`)
         const ids = await res.json()
         return ids
     }
 
-    recentlyUpdatedItems = async (world, entries = '50') => {
+    getRecentlyUpdatedItems = async (world, entries = '50') => {
         const worldType = await this.#validateServerName(world)
         let worldParam = ''
         if (worldType.world) worldParam = `world=`
@@ -98,13 +98,13 @@ class Universalis {
     }
 
     // Retrieves a generic list of recently updated items. This provides no context regarding what world or when exactly the item was updated.
-    recentlyUpdatedItemsGeneric = async () => {
+    getRecentlyUpdatedItemsGeneric = async () => {
         const res = await fetch(`${this.BASE_API_URL}/extra/stats/recently-updated`)
         const data = await res.json()
         return data
     }
 
-    uploadCounts = async () => {
+    getUploadCounts = async () => {
         return Promise.all([
             fetch(`${this.BASE_API_URL}/extra/stats/world-upload-counts`).then(res => res.json()),
             fetch(`${this.BASE_API_URL}/extra/stats/uploader-upload-counts`).then(res => res.json()),
