@@ -47,6 +47,33 @@ class Universalis {
         return data
     }
 
+    sortSalesByDay = (sales, limit) => {
+        const data = sales.entries.map((sale) => {
+            const dateObject = new Date(sale.timestamp * 1000)
+            return {
+                itemID: sales.itemID,
+                hq: sale.hq, 
+                pricePerUnit: sale.pricePerUnit,
+                quantity: sale.quantity,
+                worldName: sales.worldName || sale.worldName,
+                worldID: sales.worldID || sale.worldID,
+                date: dateObject.toLocaleDateString().replace(/\//g, '-'),
+                time: { 
+                    raw: `${dateObject.getHours()}${dateObject.getMinutes()}${dateObject.getSeconds()}`, 
+                    pretty: `${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}` 
+                } 
+            }
+        })
+    
+        const sortedSalesAsObj = data.reduce((datedGroups, { date, itemID, hq, pricePerUnit, quantity, worldName, worldID, time }) => {
+            if (!datedGroups[date]) datedGroups[date] = []
+            datedGroups[date].push({ itemID, hq, pricePerUnit, quantity, worldName, worldID, time })
+            return datedGroups
+        }, {})
+    
+        return Object.fromEntries(Object.entries(sortedSalesAsObj).slice(0, limit))
+    }
+
     taxRates = async (world) => {
         if (!this.#validateServerName(world)) return false
         const res = await fetch(`${this.BASE_API_URL}/tax-rates?world=${world}`)
