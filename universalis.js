@@ -29,7 +29,7 @@ class Universalis {
         return false // Not found
     }
 
-    listings = async (world, id) => {
+    getListings = async (world, id) => {
         if (!world || !id) return false
         if (!this.#validateServerName(world)) return false
         const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
@@ -38,7 +38,7 @@ class Universalis {
         return data
     }
 
-    sales = async (world, id) => {
+    getSales = async (world, id) => {
         if (!world || !id) return false
         if (!this.#validateServerName(world)) return false
         const itemID = typeof id === 'Array' ? itemID = this.#arrayToParam(id) : id // Check whether if id is singular or a list
@@ -47,20 +47,47 @@ class Universalis {
         return data
     }
 
-    taxRates = async (world) => {
+    sortSalesByDay = (sales, limit) => {
+        const data = sales.entries.map((sale) => {
+            const dateObject = new Date(sale.timestamp * 1000)
+            return {
+                itemID: sales.itemID,
+                hq: sale.hq, 
+                pricePerUnit: sale.pricePerUnit,
+                quantity: sale.quantity,
+                worldName: sales.worldName || sale.worldName,
+                worldID: sales.worldID || sale.worldID,
+                date: dateObject.toLocaleDateString().replace(/\//g, '-'),
+                time: { 
+                    raw: `${dateObject.getHours()}${dateObject.getMinutes()}${dateObject.getSeconds()}`, 
+                    pretty: `${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}` 
+                } 
+            }
+        })
+    
+        const sortedSalesAsObj = data.reduce((datedGroups, { date, itemID, hq, pricePerUnit, quantity, worldName, worldID, time }) => {
+            if (!datedGroups[date]) datedGroups[date] = []
+            datedGroups[date].push({ itemID, hq, pricePerUnit, quantity, worldName, worldID, time })
+            return datedGroups
+        }, {})
+    
+        return Object.fromEntries(Object.entries(sortedSalesAsObj).slice(0, limit))
+    }
+
+    getTaxRates = async (world) => {
         if (!this.#validateServerName(world)) return false
         const res = await fetch(`${this.BASE_API_URL}/tax-rates?world=${world}`)
         const rates = await res.json()
         return rates
     }
 
-    marketableItems = async () => {
+    getMarketableItems = async () => {
         const res = await fetch(`${this.BASE_API_URL}/marketable`)
         const ids = await res.json()
         return ids
     }
 
-    recentlyUpdatedItems = async (world, entries = '50') => {
+    getRecentlyUpdatedItems = async (world, entries = '50') => {
         const worldType = await this.#validateServerName(world)
         let worldParam = ''
         if (worldType.world) worldParam = `world=`
@@ -71,13 +98,13 @@ class Universalis {
     }
 
     // Retrieves a generic list of recently updated items. This provides no context regarding what world or when exactly the item was updated.
-    recentlyUpdatedItemsGeneric = async () => {
+    getRecentlyUpdatedItemsGeneric = async () => {
         const res = await fetch(`${this.BASE_API_URL}/extra/stats/recently-updated`)
         const data = await res.json()
         return data
     }
 
-    uploadCounts = async () => {
+    getUploadCounts = async () => {
         return Promise.all([
             fetch(`${this.BASE_API_URL}/extra/stats/world-upload-counts`).then(res => res.json()),
             fetch(`${this.BASE_API_URL}/extra/stats/uploader-upload-counts`).then(res => res.json()),

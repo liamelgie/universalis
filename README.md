@@ -15,7 +15,7 @@ import Universalis from 'universalis.js'
 const uni = new Universalis()
 ```
 
-## .listings(world, id)
+## .getListings(world, id)
 Retrieves the current listings for an item. This data includes the quality, price, quantity and the time that the listing was created. 
 #### Parameters
 ##### `world [string]`
@@ -33,7 +33,7 @@ const getFatCatListings = async () => {
 }
 ```
 
-## .sales(world, id)
+## .getSales(world, id)
 Retrieves the previous sales for an item. This includes the quality, price, quantity and time of the sale.
 #### Parameters
 ##### `world [string]`
@@ -52,16 +52,16 @@ const getFatCatSales = async () => {
 }
 ```
 
-## .taxRates(world)
+## .getTaxRates(world)
 Retrieves the tax rates for each city in which your retainers can list items on the market board.
 #### Parameters
 ##### `world [string]`
 The world (e.g. Cerberus) that you wish to retrieve data for. 
 
-## .marketableItems()
+## .getMarketableItems()
 Retrieves an array of every ID of items that can be listed on the market board. 
 
-## .recentlyUpdatedItems(world, entries)
+## .getRecentlyUpdatedItems(world, entries)
 Retrieves an array of recently updated items on a specific world. 
 
 In this context, recently updated means that a player who is [contributing to Universalis'](https://universalis.app/contribute) data has searched for the item via the market board in-game.
@@ -72,10 +72,10 @@ The world (e.g. Cerberus) that you wish to retrieve data for.
 ##### `entries [int]`
 The amount of results to return. Valid values range from 1-200. **Defaults to 50.**
 
-## .recentlyUpdatedItemsGeneric()
+## .getRecentlyUpdatedItemsGeneric()
 Retrieves an array of recently updated items.  This method provides no context to the data and is across every server and region.
 
-## .uploadCounts()
+## .getUploadCounts()
 Retrieves data regarding the [contributions from users](https://universalis.app/contribute).  
 
 This method returns the following:
