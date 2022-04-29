@@ -128,3 +128,6 @@ dist
 
 # Mac Metadata
 .DS_Store
+
+# Tests
+test*
