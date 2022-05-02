@@ -29,6 +29,11 @@ class Universalis {
         return false // Not found
     }
 
+    validateMarketableItem = async (id) => {
+        const validIDs = await this.getMarketableItems()
+        return validIDs.includes(id)
+    }
+
     getListings = async (world, id) => {
         if (!world || !id) return false
         if (!this.#validateServerName(world)) return false
