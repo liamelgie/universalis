@@ -52,6 +52,17 @@ class Universalis {
         return data
     }
 
+    sortListingsByWorld = (listings) => {
+        if (!listings[0].worldName) throw 'Missing .worldName property in listing data. Ensure the provided data contains results from an entire data center and not a single world'
+        const sortedListings = listings.reduce((worldGroups, { lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, sellerID, total}) => {
+            if (!worldGroups[worldName]) worldGroups[worldName] = []
+            worldGroups[worldName].push({ lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, sellerID, total})
+            return worldGroups
+        }, {})
+
+        return sortedListings
+    }
+
     sortSalesByDay = (sales, limit) => {
         const data = sales.entries.map((sale) => {
             const dateObject = new Date(sale.timestamp * 1000)
@@ -70,13 +81,13 @@ class Universalis {
             }
         })
     
-        const sortedSalesAsObj = data.reduce((datedGroups, { date, itemID, hq, pricePerUnit, quantity, worldName, worldID, time }) => {
+        const sortedSales = data.reduce((datedGroups, { date, itemID, hq, pricePerUnit, quantity, worldName, worldID, time }) => {
             if (!datedGroups[date]) datedGroups[date] = []
             datedGroups[date].push({ itemID, hq, pricePerUnit, quantity, worldName, worldID, time })
             return datedGroups
         }, {})
     
-        return Object.fromEntries(Object.entries(sortedSalesAsObj).slice(0, limit))
+        return Object.fromEntries(Object.entries(sortedSales).slice(0, limit))
     }
 
     getTaxRates = async (world) => {
