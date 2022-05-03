@@ -54,9 +54,9 @@ class Universalis {
 
     sortListingsByWorld = (listings) => {
         if (!listings[0].worldName) throw 'Missing .worldName property in listing data. Ensure the provided data contains results from an entire data center and not a single world'
-        const sortedListings = listings.reduce((worldGroups, { lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, sellerID, total}) => {
+        const sortedListings = listings.reduce((worldGroups, { lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, retainerName, sellerID, total}) => {
             if (!worldGroups[worldName]) worldGroups[worldName] = []
-            worldGroups[worldName].push({ lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, sellerID, total})
+            worldGroups[worldName].push({ lastReviewTime, pricePerUnit, quantity, stainID, worldName, worldID, creatorName, creatorID, hq, isCrafted, listingID, materia, onMannequin, retainerCity, retainerID, retainerName, sellerID, total})
             return worldGroups
         }, {})
 
