@@ -29,7 +29,25 @@ By providing an array of IDs, you can retrieve data for multiple items at once. 
 Retrieve listings on the world 'Cerberus' for the item 'Fat Cat' (9347)
 ```js
 const getFatCatListings = async () => {
-	const listings = await uni.listings('cerberus', '9347')
+	const listings = await uni.getListings('cerberus', '9347')
+}
+```
+
+## .sortListingsByWorld(listings)
+Sorts listings into an associative array with data grouped by world name. 
+
+#### Parameters
+##### `listings [array]`
+Data returned from the `getListings` method.
+
+#### Example
+Retrieve listings on the data center 'Chaos' for the item 'Fat Cat' (9347) and sort them by world.
+```js
+const getFatCatListings = async () => {
+	const sales = await uni.getListings('chaos', '9347')
+	const sorted = uni.sortListingsByWorld(listings)
+	// access listings on Spriggan:
+	sorted['Spriggan']
 }
 ```
 
@@ -48,9 +66,36 @@ By providing an array of IDs, you can retrieve data for multiple items at once. 
 Retrieve previous sales on the world 'Cerberus' for the item 'Fat Cat' (9347)
 ```js
 const getFatCatSales = async () => {
-	const sales = await uni.sales('cerberus', '9347')
+	const sales = await uni.getSales('cerberus', '9347')
 }
 ```
+
+## .sortSalesByDay(sales)
+Sorts sales into an associative array with data grouped by the date of sale. 
+**Dates are in the DD-MM-YY format.**
+
+#### Parameters
+##### `sales [array]`
+Data returned from the `getSales` method.
+
+#### Example
+Retrieve sales on the world 'Cerberus' for the item 'Fat Cat' (9347) and sort them by the date of sale.
+Dates are in the DD-MM-YY format.
+```js
+const getFatCatSales = async () => {
+	const sales = await uni.getSales('cerberus', '9347')
+	const sorted = uni.sortSalesByDay(sales)
+	// access all sales on 19-04-22:
+	sorted['19-04-22']
+}
+```
+
+## .validateMarketableItem(id)
+Checks if a provided item ID can be sold on the market board. Returns either true or false. 
+
+#### Parameters
+##### `id [string]`
+The item ID that you wish to validate.
 
 ## .getTaxRates(world)
 Retrieves the tax rates for each city in which your retainers can list items on the market board.
@@ -92,7 +137,7 @@ The number of uploads per day over the past 30 days.
 #### Example
 ```js
 const getUploadData = async () => {
-	const data = await uni.uploadCounts()
+	const data = await uni.getUploadCounts()
 	const worldCounts = data[0]
 	const applicationCounts = data[1]
 	const uploadHistory = data[2]
