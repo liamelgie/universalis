@@ -1,6 +1,6 @@
 {
   "name": "universalis.js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Promise-based Node.js wrapper for the FFXIV market board aggregator, Universalis",
   "main": "universalis.js",
   "type": "module",

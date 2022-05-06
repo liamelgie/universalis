@@ -44,7 +44,7 @@ Data returned from the `getListings` method.
 Retrieve listings on the data center 'Chaos' for the item 'Fat Cat' (9347) and sort them by world.
 ```js
 const getFatCatListings = async () => {
-	const sales = await uni.getListings('chaos', '9347')
+	const listings = await uni.getListings('chaos', '9347')
 	const sorted = uni.sortListingsByWorld(listings)
 	// access listings on Spriggan:
 	sorted['Spriggan']
