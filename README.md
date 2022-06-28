@@ -80,13 +80,13 @@ Data returned from the `getSales` method.
 
 #### Example
 Retrieve sales on the world 'Cerberus' for the item 'Fat Cat' (9347) and sort them by the date of sale.
-Dates are in the DD-MM-YY format.
+Dates are in the YYYY-MM-DD format.
 ```js
 const getFatCatSales = async () => {
 	const sales = await uni.getSales('cerberus', '9347')
 	const sorted = uni.sortSalesByDay(sales)
-	// access all sales on 19-04-22:
-	sorted['19-04-22']
+	// access all sales on 2019-04-22:
+	sorted['2019-04-22']
 }
 ```
 

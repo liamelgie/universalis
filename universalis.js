@@ -74,7 +74,7 @@ class Universalis {
                 quantity: sale.quantity,
                 worldName: sales.worldName || sale.worldName,
                 worldID: sales.worldID || sale.worldID,
-                date: dateObject.toLocaleDateString().replace(/\//g, '-'),
+                date: dateObject.format('YYYY-MM-DD'),
                 time: { 
                     raw: `${dateObject.hour()}${dateObject.minute()}${dateObject.second()}`, 
                     pretty: `${dateObject.hour()}:${dateObject.minute()}:${dateObject.second()}` 
