@@ -1,4 +1,5 @@
 import fetch from 'cross-fetch'
+import dayjs from 'dayjs'
 
 class Universalis {
     constructor(options = {}) {
@@ -65,7 +66,7 @@ class Universalis {
 
     sortSalesByDay = (sales, limit) => {
         const data = sales.entries.map((sale) => {
-            const dateObject = new Date(sale.timestamp * 1000)
+            const dateObject = dayjs(sale.timestamp * 1000)
             return {
                 itemID: sales.itemID,
                 hq: sale.hq, 
@@ -75,8 +76,8 @@ class Universalis {
                 worldID: sales.worldID || sale.worldID,
                 date: dateObject.toLocaleDateString().replace(/\//g, '-'),
                 time: { 
-                    raw: `${dateObject.getHours()}${dateObject.getMinutes()}${dateObject.getSeconds()}`, 
-                    pretty: `${dateObject.getHours()}:${dateObject.getMinutes()}:${dateObject.getSeconds()}` 
+                    raw: `${dateObject.hour()}${dateObject.minute()}${dateObject.second()}`, 
+                    pretty: `${dateObject.hour()}:${dateObject.minute()}:${dateObject.second()}` 
                 } 
             }
         })
