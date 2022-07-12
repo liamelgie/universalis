@@ -3,7 +3,8 @@ import dayjs from 'dayjs'
 
 class Universalis {
     constructor(options = {}) {
-        this.BASE_API_URL = 'https://universalis.app/api/v2/'
+        this.BASE_UNIVERSALIS_URL = 'https://universalis.app/api/v2'
+        this.BASE_XIVAPI_URL = `https://xivapi.com`
     }
 
     #arrayToParam = (array) => {
@@ -16,7 +17,7 @@ class Universalis {
     #validateServerName = async (name) => {
         if (!name) return false
 
-        const servers = await fetch('https://xivapi.com/servers/dc').then(res => res.json())
+        const servers = await fetch(`${this.BASE_XIVAPI_URL}/servers/dc`).then(res => res.json())
         const dataCenter = await Object.keys(servers)
         if (dataCenter.includes(name)) return { dataCenter: true, world: false } // Maybe rethink on what to return
         const worlds = await Object.values(servers)
@@ -29,12 +30,12 @@ class Universalis {
     }
 
     getDataCenters = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/data-centers`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/data-centers`)
         return res.json()
     }
 
     getWorlds = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/worlds`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/worlds`)
         return res.json()
     }
 
@@ -48,7 +49,7 @@ class Universalis {
 
         const { listingLimit, tax, hq } = options
         if (typeof itemIds === 'Array') itemIds = this.#arrayToParam(itemIds)
-        const res = await fetch(`${this.BASE_API_URL}/${worldDcRegion}/${itemIds}?
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/${worldDcRegion}/${itemIds}?
             ${listingLimit ? `listings=${listingLimit}`: ''}
             ${tax ? `noGst=false` : `noGst=true`}
             ${hq ? `hq=true` : `hq=false`}
@@ -60,7 +61,7 @@ class Universalis {
         if (!worldDcRegion || !itemIds || !this.#validateServerName(worldDcRegion)) return false
 
         if (typeof itemIds === 'Array') itemIds = this.#arrayToParam(itemIds)
-        const res = await fetch(`${this.BASE_API_URL}/history/${worldDcRegion}/${itemIds}`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/history/${worldDcRegion}/${itemIds}`)
         return res.json()
     }
 
@@ -102,12 +103,12 @@ class Universalis {
     getTaxRates = async (world) => {
         if (!this.#validateServerName(world)) return false
 
-        const res = await fetch(`${this.BASE_API_URL}/tax-rates/?world=${world}`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/tax-rates/?world=${world}`)
         return res.json()
     }
 
     getMarketableItems = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/marketable`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/marketable`)
         return res.json()
     }
 
@@ -118,7 +119,7 @@ class Universalis {
         if (!worldTypeValidation) return false
 
         const { entries } = options
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/least-recently-updated?
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/least-recently-updated?
             ${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}
             ${worldTypeValidation.world ? `world=${worldDc}` : ''}
             ${entries ? `&entries=${entries}` : ''}    
@@ -133,7 +134,7 @@ class Universalis {
         if (!worldTypeValidation) return false
 
         const { entries } = options
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/most-recently-updated?
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/most-recently-updated?
             ${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}
             ${worldTypeValidation.world ? `world=${worldDc}` : ''}
             ${entries ? `&entries=${entries}` : ''}    
@@ -143,32 +144,32 @@ class Universalis {
 
     // Retrieves a generic list of recently updated items. This provides no context regarding what world or when exactly the item was updated.
     getRecentlyUpdatedItemsLegacy = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/recently-updated`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/recently-updated`)
         return res.json()
     }
 
     getUploadCounts = async () => {
         return Promise.all([
-            fetch(`${this.BASE_API_URL}/extra/stats/world-upload-counts`).then(res => res.json()),
-            fetch(`${this.BASE_API_URL}/extra/stats/uploader-upload-counts`).then(res => res.json()),
-            fetch(`${this.BASE_API_URL}/extra/stats/upload-history`).then(res => res.json())
+            fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/world-upload-counts`).then(res => res.json()),
+            fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/uploader-upload-counts`).then(res => res.json()),
+            fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/upload-history`).then(res => res.json())
         ]).then(counts => {
             return { world: counts[0], application: counts[1], history: counts[2] }
         })
     }
 
     getUploadCountsByWorld = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/world-upload-counts`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/world-upload-counts`)
         return res.json()
     }
 
     getUploadCountsByApplication = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/uploader-upload-counts`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/uploader-upload-counts`)
         return res.json()
     }
 
     getUploadCountsHistory = async () => {
-        const res = await fetch(`${this.BASE_API_URL}/extra/stats/upload-history`)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/upload-history`)
         return res.json()
     }
 }
