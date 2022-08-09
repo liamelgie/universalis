@@ -48,16 +48,12 @@ class Universalis {
         return validIDs.includes(id)
     }
 
-    getListings = async (worldDcRegion, itemIds, options) => {
+    getListings = async (worldDcRegion, itemIds, options = {}) => {
         if (!worldDcRegion || !itemIds || !this.#validateServerName(worldDcRegion)) return false
 
         const { listingLimit, tax, hq } = options
         if (typeof itemIds === 'Array') itemIds = this.#arrayToParam(itemIds)
-        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/${worldDcRegion}/${itemIds}?
-            ${listingLimit ? `listings=${listingLimit}`: ''}
-            ${tax ? `noGst=false` : `noGst=true`}
-            ${hq ? `hq=true` : `hq=false`}
-        `)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/${worldDcRegion}/${itemIds}?${listingLimit ? `listings=${listingLimit}&`: ''}${tax ? `noGst=false&` : `noGst=true&`}${hq ? `hq=true` : `hq=false`}`)
         return res.json()
     }
 
@@ -116,33 +112,25 @@ class Universalis {
         return res.json()
     }
 
-    getLeastRecentlyUpdatedItems = async (worldDc, options) => {
+    getLeastRecentlyUpdatedItems = async (worldDc, options = {}) => {
         if (!worldDc) return false
 
         const worldTypeValidation = await this.#validateServerName(worldDc)
         if (!worldTypeValidation) return false
 
         const { entries } = options
-        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/least-recently-updated?
-            ${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}
-            ${worldTypeValidation.world ? `world=${worldDc}` : ''}
-            ${entries ? `&entries=${entries}` : ''}    
-        `)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/least-recently-updated?${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}${worldTypeValidation.world ? `world=${worldDc}` : ''}${entries ? `&entries=${entries}` : ''}`)
         return res.json()
     }
     
-    getMostRecentlyUpdatedItems = async (worldDc, options) => {
+    getMostRecentlyUpdatedItems = async (worldDc, options = {}) => {
         if (!worldDc) return false
 
         const worldTypeValidation = await this.#validateServerName(worldDc)
         if (!worldTypeValidation) return false
 
         const { entries } = options
-        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/most-recently-updated?
-            ${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}
-            ${worldTypeValidation.world ? `world=${worldDc}` : ''}
-            ${entries ? `&entries=${entries}` : ''}    
-        `)
+        const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/extra/stats/most-recently-updated?${worldTypeValidation.dataCenter ? `dcName=${worldDc}` : ''}${worldTypeValidation.world ? `world=${worldDc}` : ''}${entries ? `&entries=${entries}` : ''}`)
         return res.json()
     }
 
