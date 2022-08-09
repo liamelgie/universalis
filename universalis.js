@@ -7,6 +7,10 @@ class Universalis {
         this.BASE_XIVAPI_URL = `https://xivapi.com`
     }
 
+    #capitalise = (string) => {
+        return string[0].toUpperCase() + string.slice(1);
+      }
+
     #arrayToParam = (array) => {
         const param = array.map((item) => {
             return JSON.stringify(item)
@@ -16,11 +20,11 @@ class Universalis {
 
     #validateServerName = async (name) => {
         if (!name) return false
-
+        name = this.#capitalise(name) // Mutate string to ensure first character is a capital
         const servers = await fetch(`${this.BASE_XIVAPI_URL}/servers/dc`).then(res => res.json())
-        const dataCenter = await Object.keys(servers)
+        const dataCenter =  Object.keys(servers)
         if (dataCenter.includes(name)) return { dataCenter: true, world: false } // Maybe rethink on what to return
-        const worlds = await Object.values(servers)
+        const worlds = Object.values(servers)
         for (let dc of worlds) {
             if (dc.includes(name)) {
                 return { dataCenter: false, world: true } // Maybe rethink on what to return 
@@ -101,8 +105,8 @@ class Universalis {
     }
 
     getTaxRates = async (world) => {
-        if (!this.#validateServerName(world)) return false
-
+        const validatedServerName = await this.#validateServerName(world)
+        if (!validatedServerName || validatedServerName.dataCenter === true) return false
         const res = await fetch(`${this.BASE_UNIVERSALIS_URL}/tax-rates/?world=${world}`)
         return res.json()
     }
@@ -115,7 +119,7 @@ class Universalis {
     getLeastRecentlyUpdatedItems = async (worldDc, options) => {
         if (!worldDc) return false
 
-        const worldTypeValidation = this.#validateServerName(worldDc)
+        const worldTypeValidation = await this.#validateServerName(worldDc)
         if (!worldTypeValidation) return false
 
         const { entries } = options
@@ -130,7 +134,7 @@ class Universalis {
     getMostRecentlyUpdatedItems = async (worldDc, options) => {
         if (!worldDc) return false
 
-        const worldTypeValidation = this.#validateServerName(worldDc)
+        const worldTypeValidation = await this.#validateServerName(worldDc)
         if (!worldTypeValidation) return false
 
         const { entries } = options
