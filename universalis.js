@@ -43,9 +43,9 @@ class Universalis {
         return res.json()
     }
 
-    validateMarketableItem = async (id) => {
+    validateMarketableItem = async (itemId) => {
         const validIDs = await this.getMarketableItems()
-        return validIDs.includes(id)
+        return validIDs.includes(itemId)
     }
 
     getListings = async (worldDcRegion, itemIds, options = {}) => {
@@ -57,7 +57,7 @@ class Universalis {
         return res.json()
     }
 
-    getSales = async (worldDcRegion, itemIds, options) => {
+    getSales = async (worldDcRegion, itemIds) => {
         if (!worldDcRegion || !itemIds || !this.#validateServerName(worldDcRegion)) return false
 
         if (typeof itemIds === 'Array') itemIds = this.#arrayToParam(itemIds)
