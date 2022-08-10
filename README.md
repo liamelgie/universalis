@@ -15,21 +15,29 @@ import Universalis from 'universalis.js'
 const uni = new Universalis()
 ```
 
-## .getListings(world, id)
+## .getListings(worldDcRegion, itemIds, options)
 Retrieves the current listings for an item. This data includes the quality, price, quantity and the time that the listing was created. 
 #### Parameters
-##### `world [string]`
-A specific world (e.g. Cerberus) or a data center (e.g. Chaos) that you wish to retrieve the data for. Providing a data center will return data for all worlds within it.
+##### `worldDcRegion [string]`
+A specific world (e.g. Cerberus) or data center (e.g. Chaos) that you wish to retrieve the data for. Providing a data center will return data for all worlds within it.
 
-##### `id [string][array]`
+##### `itemIds [string][array]`
 An ID that corresponds to an item.  IDs can be found via the [Universalis app](https://universalis.app) or via the `marketableItems` method.
 
 By providing an array of IDs, you can retrieve data for multiple items at once. Make sure to do this to prevent hitting rate limits and to maximize performance.
+
+##### `options [object]`
+An object that contains the optional parameters that can be used to refine your results. These options include:
+listingLimit, tax, hq
+`listingLimit [number]`: The amount of listings that should be returned. The listings will be ordered by price from lowest to highest.
+`tax [boolean]`: If city-state tax should be included in the total price for each listing.
+`hq [boolean]`: If listings should be limited to HQ items only. 
+
 #### Example
-Retrieve listings on the world 'Cerberus' for the item 'Fat Cat' (9347)
+Retrieve 10 HQ listings on the world 'Cerberus' for the item 'Fat Cat' (9347)
 ```js
 const getFatCatListings = async () => {
-	const listings = await uni.getListings('cerberus', '9347')
+	const listings = await uni.getListings('cerberus', '9347', { hq: true, listingLimit: 10 })
 }
 ```
 
@@ -51,13 +59,13 @@ const getFatCatListings = async () => {
 }
 ```
 
-## .getSales(world, id)
+## .getSales(worldDcRegion, itemIds)
 Retrieves the previous sales for an item. This includes the quality, price, quantity and time of the sale.
 #### Parameters
-##### `world [string]`
-A specific world (e.g. Cerberus) or a data center (e.g. Chaos) that you wish to retrieve the data for. Providing a data center will return data for all worlds within it.
+##### `worldDcRegion [string]`
+A specific world (e.g. Cerberus) or data center (e.g. Chaos) that you wish to retrieve the data for. Providing a data center will return data for all worlds within it.
 
-##### `id [string][array]`
+##### `itemIds [string][array]`
 An ID that corresponds to an item.  IDs can be found via the [Universalis app](https://universalis.app) or via the `marketableItems` method.
 
 By providing an array of IDs, you can retrieve data for multiple items at once. Make sure to do this to prevent hitting rate limits and to maximize performance.
@@ -72,7 +80,7 @@ const getFatCatSales = async () => {
 
 ## .sortSalesByDay(sales)
 Sorts sales into an associative array with data grouped by the date of sale. 
-**Dates are in the DD-MM-YY format.**
+**Dates are in the YYYY-MM-DD format.**
 
 #### Parameters
 ##### `sales [array]`
@@ -90,11 +98,11 @@ const getFatCatSales = async () => {
 }
 ```
 
-## .validateMarketableItem(id)
+## .validateMarketableItem(itemId)
 Checks if a provided item ID can be sold on the market board. Returns either true or false. 
 
 #### Parameters
-##### `id [string]`
+##### `itemId [string]`
 The item ID that you wish to validate.
 
 ## .getTaxRates(world)
@@ -106,18 +114,32 @@ The world (e.g. Cerberus) that you wish to retrieve data for.
 ## .getMarketableItems()
 Retrieves an array of every ID of items that can be listed on the market board. 
 
-## .getRecentlyUpdatedItems(world, entries)
+## .getMostRecentlyUpdatedItems(worldDc, options)
 Retrieves an array of recently updated items on a specific world. 
 
 In this context, recently updated means that a player who is [contributing to Universalis'](https://universalis.app/contribute) data has searched for the item via the market board in-game.
 
 #### Parameters
-##### `world [string]`
-The world (e.g. Cerberus) that you wish to retrieve data for. 
-##### `entries [int]`
-The amount of results to return. Valid values range from 1-200. **Defaults to 50.**
+##### `worldDc [string]`
+The world (e.g. Cerberus) or data center (e.g. Chaos) that you wish to retrieve data for. 
+##### `options [object]`
+An object that contains the optional parameters that can be used to refine your results. Currently, these options only include:
+`entries [int]`: The amount of results to return. Valid values range from 1-200. **Defaults to 50.**
 
-## .getRecentlyUpdatedItemsGeneric()
+## .getLeastRecentlyUpdatedItems(worldDc, options)
+Retrieves an array of recently updated items on a specific world. 
+
+In this context, recently updated means that a player who is [contributing to Universalis'](https://universalis.app/contribute) data has searched for the item via the market board in-game.
+
+#### Parameters
+##### `worldDc [string]`
+The world (e.g. Cerberus) or data center (e.g. Chaos) that you wish to retrieve data for. 
+##### `options [object]`
+An object that contains the optional parameters that can be used to refine your results. Currently, these options only include:
+`entries [int]`: The amount of results to return. Valid values range from 1-200. **Defaults to 50.**
+
+
+## .getRecentlyUpdatedItemsLegacy()
 Retrieves an array of recently updated items.  This method provides no context to the data and is across every server and region.
 
 ## .getUploadCounts()
